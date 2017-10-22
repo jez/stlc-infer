@@ -20,29 +20,30 @@ import           Unbound.Generics.LocallyNameless (bind, s2n)
   'ifz'      {TokIfz}
   'then'     {TokThen}
   'else'     {TokElse}
-  'end'      {TokEnd}
   '('        {TokLParen}
   ')'        {TokRParen}
-  '='        {TokEq}
   numeral    {TokNumeral $$}
   ident      {TokTermIdent $$}
 
 %%
 
 Term
-  : ident {Tvar (s2n $1)}
+  : '\\' ident '->' Term   {Tlam (bind (s2n $2) $4)}
+  | 'ifz' Term 'then' Term 'else' ident '->' Term  {Tifz $2 $4 (bind (s2n $6) $8)}
+  | 'if'  Term 'then' Term 'else'            Term  {Tif $2 $4 $6}
+  | Form                   {$1}
 
-  | '(' '\\' ident '->' Term ')' {Tlam (bind (s2n $3) $5)}
-  | Term '(' Term ')' {Tapp $1 $3}
+-- We have to factor the Term grammar into Form and Atom to avoid conflicts
+Form
+  : Form Atom              {Tapp $1 $2}
+  | Atom                   {$1}
 
-  | numeral {unaryFromInt $1}
-  | 'ifz' Term 'then' Term 'else' ident '->' Term 'end' {Tifz $2 $4 (bind (s2n $6) $8)}
-
-  | 'True' {Tbool True}
-  | 'False' {Tbool False}
-  | 'if' Term 'then' Term 'else' Term 'end' {Tif $2 $4 $6}
-
-  | '(' Term ')' {$2}
+Atom
+  : '(' Term ')'           {$2}
+  | 'True'                 {Tbool True}
+  | 'False'                {Tbool False}
+  | numeral                {unaryFromInt $1}
+  | ident                  {Tvar (s2n $1)}
 
 {
 

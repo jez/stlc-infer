@@ -27,11 +27,9 @@ tokens :-
   "ifz"                          {\_ _ -> TokIfz}
   "then"                         {\_ _ -> TokThen}
   "else"                         {\_ _ -> TokElse}
-  -- TODO(jez) Replace 'end' with significant whitespace
-  "end"                          {\_ _ -> TokEnd}
   [\(]                           {\_ _ -> TokLParen}
   [\)]                           {\_ _ -> TokRParen}
-  "="                            {\_ _ -> TokEq}
+  -- TODO(jez) Replace naturals with integers
   $digit+                        {\_ -> TokNumeral . read}
   $lower [$alpha $digit \_ \']*  {\_ -> TokTermIdent}
 
@@ -45,10 +43,8 @@ data Token
   | TokIfz
   | TokThen
   | TokElse
-  | TokEnd
   | TokLParen
   | TokRParen
-  | TokEq
   | TokNumeral Int
   | TokTermIdent String
   deriving (Eq, Show)
