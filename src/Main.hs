@@ -26,5 +26,7 @@ main = do
   printAndParse "if True then 0 else 1"
   printAndParse "ifz True then 0 else x -> 1"
   printAndParse "\\x -> x"
+  -- Uncomment to test lexer error
+  -- printAndParse "λx -> x"
   -- Uncomment to test parse error
   -- printAndParse "\\x ->"

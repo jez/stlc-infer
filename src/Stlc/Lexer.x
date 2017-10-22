@@ -19,19 +19,19 @@ tokens :-
   -- Comments
   "--".*                         ;
 
-  [\\]                           {\_ _ -> TokBackslash}
-  "->"                           {\_ _ -> TokThinArrow}
-  "True"                         {\_ _ -> TokTrue}
-  "False"                        {\_ _ -> TokFalse}
-  "if"                           {\_ _ -> TokIf}
-  "ifz"                          {\_ _ -> TokIfz}
-  "then"                         {\_ _ -> TokThen}
-  "else"                         {\_ _ -> TokElse}
-  [\(]                           {\_ _ -> TokLParen}
-  [\)]                           {\_ _ -> TokRParen}
+  [\\]                           {const2 TokBackslash}
+  "->"                           {const2 TokThinArrow}
+  "True"                         {const2 TokTrue}
+  "False"                        {const2 TokFalse}
+  "if"                           {const2 TokIf}
+  "ifz"                          {const2 TokIfz}
+  "then"                         {const2 TokThen}
+  "else"                         {const2 TokElse}
+  [\(]                           {const2 TokLParen}
+  [\)]                           {const2 TokRParen}
   -- TODO(jez) Replace naturals with integers
-  $digit+                        {\_ -> TokNumeral . read}
-  $lower [$alpha $digit \_ \']*  {\_ -> TokTermIdent}
+  $digit+                        {withString $ TokNumeral . read}
+  $lower [$alpha $digit \_ \']*  {withString $ TokTermIdent}
 
 {
 data Token
@@ -48,4 +48,12 @@ data Token
   | TokNumeral Int
   | TokTermIdent String
   deriving (Eq, Show)
+
+-- Useful combinators for constructing token actions
+const2 :: a -> b -> c -> a
+const2 = const.const
+
+withString :: (String -> a) -> AlexPosn -> String -> a
+withString f _ s = f s
+
 }
