@@ -10,13 +10,19 @@ import Stlc.Unify
 parse :: String -> Term
 parse = parseStlc . alexScanTokens
 
+printAndParse :: [Char] -> IO ()
+printAndParse prog = do
+  putStrLn $ "> " ++ prog
+  print $ parse prog
+  putStrLn ""
+
 main :: IO ()
 main = do
-  print $ parse "0"
-  print $ parse "1"
-  print $ parse "(0)"
-  print $ parse "(True)"
-  print $ parse "(False)"
-  print $ parse "if True then 0 else 1 end"
-  print $ parse "ifz True then 0 else x -> 1 end"
-  print $ parse "(λx -> x)"
+  printAndParse "0"
+  printAndParse "1"
+  printAndParse "(0)"
+  printAndParse "(True)"
+  printAndParse "(False)"
+  printAndParse "if True then 0 else 1 end"
+  printAndParse "ifz True then 0 else x -> 1 end"
+  printAndParse "(\\x -> x)"
