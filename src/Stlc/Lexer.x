@@ -16,7 +16,7 @@ tokens :-
   -- Comments
   "--".*                         ;
 
-  "λ"                           {\_ -> TokBackslash}
+  [\\]                           {\_ -> TokBackslash}
   "->"                           {\_ -> TokThinArrow}
   "True"                         {\_ -> TokTrue}
   "False"                        {\_ -> TokFalse}
