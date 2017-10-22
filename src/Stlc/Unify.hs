@@ -7,8 +7,6 @@ import           Stlc.Types
 
 import           Control.Lens                     (noneOf)
 
--- TODO(jez) How to use patterns?
--- TODO(jez) Fix type errors
 import           Data.Sequence                    (ViewL ((:<)), (|>))
 import qualified Data.Sequence                    as Seq
 import           Unbound.Generics.LocallyNameless
@@ -43,4 +41,5 @@ unify (Seq.viewl -> Constraint (t1, Cvar t) :< cs)
 unify (Seq.viewl -> Constraint (Carrow s1 s2, Carrow t1 t2) :< cs) =
   unify (cs |> Constraint (s1, t1) |> Constraint (s2, t2))
   -- TODO(jez) Be more explicit about fall through here
+  -- TODO(jez) Better error messages
 unify _ = Nothing

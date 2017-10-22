@@ -25,8 +25,6 @@ constrain t1 t2 = lift . tell . Seq.singleton $ Constraint (t1, t2)
 --
 -- by threading F through the FreshMT monad, and
 -- collecting the constraints C using a Writer monad.
---
--- TODO(jez) Rename this to Constrain.hs
 genConstraints :: Ctx -> Term -> FreshMT (Writer (Seq.Seq Constraint)) Con
 genConstraints ctx (Tvar x) = return $ ctx ! x
 genConstraints ctx (Tlam bnd) = do

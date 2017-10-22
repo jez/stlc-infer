@@ -37,9 +37,14 @@ Term
   | 'let' ident '=' Term 'in' Term  {Tlet $4 (bind (s2n $2) $6)}
   | Form                   {$1}
 
+-- TODO(jez) This is here so you remember where to update things
+-- if you ever add any infix operators.
+-- See http://dev.stephendiehl.com/fun/008_extended_parser.html
+Form : Fact {$1}
+
 -- We have to factor the Term grammar into Form and Atom to avoid conflicts
-Form
-  : Form Atom              {Tapp $1 $2}
+Fact
+  : Fact Atom              {Tapp $1 $2}
   | Atom                   {$1}
 
 Atom

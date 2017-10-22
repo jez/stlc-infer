@@ -28,7 +28,6 @@ executable stlc-infer
     array,
     base >= 4.7 && < 5,
     containers,
-    -- TODO(jez) Remove this if you no longer need it
     lens,
     mtl,
     unbound-generics

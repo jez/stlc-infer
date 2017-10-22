@@ -7,3 +7,5 @@ TODO(jez)
 - [ ] Test cases for parser
 - [ ] Test cases for inference
 - [ ] Implement interpreter
+- [ ] Better error messages
+- [ ] Replace naturals with integers
