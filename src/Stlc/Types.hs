@@ -43,6 +43,8 @@ data Term
   | Tlam (Bind Tvar Term)
   | Tapp Term
          Term
+  | Tlet Term
+         (Bind Tvar Term)
   | Tz
   | Ts Term
   -- | Tprec Term Term (Bind (Tvar, Tvar) Term)

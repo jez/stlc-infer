@@ -21,6 +21,9 @@ tokens :-
 
   [\\]                           {const2 TokBackslash}
   "->"                           {const2 TokThinArrow}
+  "let"                          {const2 TokLet}
+  "="                            {const2 TokEq}
+  "in"                           {const2 TokIn}
   "True"                         {const2 TokTrue}
   "False"                        {const2 TokFalse}
   "if"                           {const2 TokIf}
@@ -37,6 +40,9 @@ tokens :-
 data Token
   = TokBackslash
   | TokThinArrow
+  | TokLet
+  | TokEq
+  | TokIn
   | TokTrue
   | TokFalse
   | TokIf

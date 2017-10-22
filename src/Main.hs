@@ -26,6 +26,9 @@ main = do
   printAndParse "if True then 0 else 1"
   printAndParse "ifz True then 0 else x -> 1"
   printAndParse "\\x -> x"
+  printAndParse "let x = True in x"
+  printAndParse "let x = True in let y = False in z"
+  printAndParse "let id = \\x -> x in id id"
   -- Uncomment to test lexer error
   -- printAndParse "λx -> x"
   -- Uncomment to test parse error

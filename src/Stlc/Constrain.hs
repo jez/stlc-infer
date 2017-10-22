@@ -29,9 +29,8 @@ constrain t1 t2 = lift . tell . Seq.singleton $ Constraint (t1, t2)
 -- TODO(jez) Rename this to Constrain.hs
 genConstraints :: Ctx -> Term -> FreshMT (Writer (Seq.Seq Constraint)) Con
 genConstraints ctx (Tvar x) = return $ ctx ! x
-genConstraints ctx (Tlam bnd)
+genConstraints ctx (Tlam bnd) = do
   -- 'out' the ABT
- = do
   (x, e) <- unbind bnd
   -- Generate fresh type variable to put into the context
   t1 <- Cvar <$> fresh (s2n "t1_")
@@ -44,6 +43,12 @@ genConstraints ctx (Tapp e1 e2) = do
   t <- Cvar <$> fresh (s2n "t_")
   constrain t1 (Carrow t2 t)
   return t
+genConstraints ctx (Tlet e1 bnd) = do
+  (x, e2) <- unbind bnd
+  t1 <- genConstraints ctx e1
+  let ctx' = Map.insert x t1 ctx
+  t2 <- genConstraints ctx' e2
+  return t2
 genConstraints _ Tz = do
   return Cnat
 genConstraints ctx (Ts en) = do

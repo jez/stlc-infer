@@ -14,6 +14,9 @@ import           Unbound.Generics.LocallyNameless (bind, s2n)
 %token
   '\\'       {TokBackslash}
   '->'       {TokThinArrow}
+  'let'      {TokLet}
+  '='        {TokEq}
+  'in'       {TokIn}
   'True'     {TokTrue}
   'False'    {TokFalse}
   'if'       {TokIf}
@@ -31,6 +34,7 @@ Term
   : '\\' ident '->' Term   {Tlam (bind (s2n $2) $4)}
   | 'ifz' Term 'then' Term 'else' ident '->' Term  {Tifz $2 $4 (bind (s2n $6) $8)}
   | 'if'  Term 'then' Term 'else'            Term  {Tif $2 $4 $6}
+  | 'let' ident '=' Term 'in' Term  {Tlet $4 (bind (s2n $2) $6)}
   | Form                   {$1}
 
 -- We have to factor the Term grammar into Form and Atom to avoid conflicts
