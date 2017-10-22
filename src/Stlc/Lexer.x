@@ -2,7 +2,10 @@
 module Stlc.Lexer where
 }
 
-%wrapper "basic"
+-- The posn wrapper tracks line and column information for us.
+-- This makes the error message from the lexer friendlier.
+-- TODO(jez) Track the posn information to print better type errors.
+%wrapper "posn"
 
 $digit = [0-9]
 
@@ -16,21 +19,21 @@ tokens :-
   -- Comments
   "--".*                         ;
 
-  [\\]                           {\_ -> TokBackslash}
-  "->"                           {\_ -> TokThinArrow}
-  "True"                         {\_ -> TokTrue}
-  "False"                        {\_ -> TokFalse}
-  "if"                           {\_ -> TokIf}
-  "ifz"                          {\_ -> TokIfz}
-  "then"                         {\_ -> TokThen}
-  "else"                         {\_ -> TokElse}
+  [\\]                           {\_ _ -> TokBackslash}
+  "->"                           {\_ _ -> TokThinArrow}
+  "True"                         {\_ _ -> TokTrue}
+  "False"                        {\_ _ -> TokFalse}
+  "if"                           {\_ _ -> TokIf}
+  "ifz"                          {\_ _ -> TokIfz}
+  "then"                         {\_ _ -> TokThen}
+  "else"                         {\_ _ -> TokElse}
   -- TODO(jez) Replace 'end' with significant whitespace
-  "end"                          {\_ -> TokEnd}
-  [\(]                           {\_ -> TokLParen}
-  [\)]                           {\_ -> TokRParen}
-  "="                            {\_ -> TokEq}
-  $digit+                        {TokNumeral . read}
-  $lower [$alpha $digit \_ \']*  {TokTermIdent}
+  "end"                          {\_ _ -> TokEnd}
+  [\(]                           {\_ _ -> TokLParen}
+  [\)]                           {\_ _ -> TokRParen}
+  "="                            {\_ _ -> TokEq}
+  $digit+                        {\_ -> TokNumeral . read}
+  $lower [$alpha $digit \_ \']*  {\_ -> TokTermIdent}
 
 {
 data Token
