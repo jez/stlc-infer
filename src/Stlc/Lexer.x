@@ -1,11 +1,13 @@
 {
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
+
 module Stlc.Lexer where
 }
 
 -- The posn wrapper tracks line and column information for us.
 -- This makes the error message from the lexer friendlier.
 -- TODO(jez) Track the posn information to print better type errors.
-%wrapper "posn"
+%wrapper "monad"
 
 $digit = [0-9]
 
@@ -53,13 +55,20 @@ data Token
   | TokRParen
   | TokNumeral Int
   | TokTermIdent String
+  | TokEOF
   deriving (Eq, Show)
 
--- Useful combinators for constructing token actions
-const2 :: a -> b -> c -> a
-const2 = const.const
+alexEOF :: Alex Token
+alexEOF = return TokEOF
 
-withString :: (String -> a) -> AlexPosn -> String -> a
-withString f _ s = f s
+-- Useful combinators for constructing token actions
+const2 :: a -> b -> c -> Alex a
+const2 = const.const.return
+
+withString :: (String -> a) -> AlexInput -> Int -> Alex a
+withString f (_, _, _, input) len = return . f $ take len input
+
+lexer :: (Token -> Alex a) -> Alex a
+lexer = (alexMonadScan >>=)
 
 }

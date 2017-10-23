@@ -8,8 +8,10 @@ import           Unbound.Generics.LocallyNameless (bind, s2n)
 }
 
 %name parseStlc
-%tokentype {Token}
-%error {const (error "Parse error")}
+%tokentype { Token }
+%error { parseError }
+%monad { Alex }
+%lexer { lexer } { TokEOF }
 
 %token
   '\\'       {TokBackslash}
@@ -59,6 +61,19 @@ Atom
 unaryFromInt :: Int -> Term
 unaryFromInt n | n <= 0 = Tz
 unaryFromInt n = Ts . unaryFromInt $ n - 1
+
+parse :: String -> Either String Term
+parse s = runAlex s parseStlc
+
+-- TODO(jez) More human readable error messages
+parseError :: Token -> Alex a
+parseError t = Alex $ Left . (parseErrorMsg t)
+
+parseErrorMsg :: Token -> AlexState -> String
+parseErrorMsg t alexState =
+  let AlexPn offset line col = alex_pos alexState
+      in "Parse error on l" ++ show line ++ ":c" ++ show col ++
+         " (char: " ++ show offset ++ "). Token: " ++ show t
 
 }
 
