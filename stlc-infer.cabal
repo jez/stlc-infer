@@ -18,6 +18,7 @@ executable stlc-infer
   main-is:             Main.hs
   other-modules:
     Stlc.Constrain,
+    Stlc.Eval,
     Stlc.Lexer,
     Stlc.Parser,
     Stlc.Subst,
@@ -33,6 +34,7 @@ executable stlc-infer
     containers,
     lens,
     mtl,
+    haskeline,
     unbound-generics
   ghc-options:
     -Wall
