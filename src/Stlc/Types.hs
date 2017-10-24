@@ -9,7 +9,8 @@ module Stlc.Types
   , Con(..)
   , Term(..)
   , Constraint(..)
-  , ExplicitSubst(..)
+  , bothConstraint
+  , ExplSubst(..)
   ) where
 
 import           Data.Typeable                    (Typeable)
@@ -79,15 +80,23 @@ instance Subst Term Term where
   isvar (Tvar x) = Just (SubstName x)
   isvar _        = Nothing
 
--- A constraint is just a pair type types.
+-- A constraint is just a pair of types.
 -- A constraints records the fact that two types must be equal.
-newtype Constraint =
-  Constraint (Con, Con)
+data Constraint =
+  Constraint Con
+             Con
   deriving (Show)
 
--- Substitutions reified as a datastructure, rather
+-- A hand-written Traversal'. It just runs a function over both the Con's of a
+-- constraint, and collects their result inside a functor.
+-- Alternatively, we could have the compiler generate this with 'makeLenses'
+bothConstraint :: Applicative f => (Con -> f Con) -> Constraint -> f Constraint
+bothConstraint f (Constraint t1 t2) = Constraint <$> f t1 <*> f t2
+
+-- Substitutions reified as a data structure, rather
 -- than being implicit in the algorithm somewhere.
 -- Maps variables of one sort to ABTs of that sort.
-newtype ExplicitSubst a =
-  ExplicitSubst (Name a, a)
+data ExplSubst a =
+  ExplSubst (Name a)
+                a
   deriving (Show)

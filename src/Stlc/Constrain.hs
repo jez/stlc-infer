@@ -1,7 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Stlc.Constrain
-  ( constraints
+  ( constraintsWithCon
   ) where
 
 import           Stlc.Types
@@ -16,8 +16,9 @@ type Ctx = Map.Map Tvar Con
 
 -- The Writer monad is really just an abstraction around an accumulator argument
 -- and 'tell' is how we append something in the accumulator.
+-- TODO(jez) I'm convinced we can write this in point-free form
 constrain :: Con -> Con -> FreshMT (Writer (Seq.Seq Constraint)) ()
-constrain t1 t2 = lift . tell . Seq.singleton $ Constraint (t1, t2)
+constrain t1 t2 = lift . tell . Seq.singleton $ Constraint t1 t2
 
 -- Implements the judgement:
 --
@@ -79,5 +80,5 @@ genConstraints ctx (Tif ei et ee) = do
   -- Return type of 'then' branch, because 'then' and 'else' must be the same
   return tt
 
-constraints :: Term -> Seq.Seq Constraint
-constraints e = execWriter . runFreshMT $ genConstraints Map.empty e
+constraintsWithCon :: Term -> (Con, Seq.Seq Constraint)
+constraintsWithCon e = runWriter . runFreshMT $ genConstraints Map.empty e
