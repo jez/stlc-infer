@@ -53,6 +53,24 @@ executable stlc-infer
   build-depends:
     base >= 4.7 && < 5,
     haskeline,
+    stlc-infer
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Wmissing-signatures
+    -Werror
+    -funbox-strict-fields
+
+
+test-suite stlc-infer-test
+  type: exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  default-language:    Haskell2010
+  build-depends:
+    base >= 4.7 && < 5,
+    hspec,
+    stlc-infer,
     unbound-generics
   ghc-options:
     -Wall
