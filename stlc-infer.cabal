@@ -13,17 +13,17 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
 
-executable stlc-infer
+library
   hs-source-dirs:      src
-  main-is:             Main.hs
-  other-modules:
-    Stlc.Constrain,
-    Stlc.Eval,
-    Stlc.Infer,
-    Stlc.Lexer,
-    Stlc.Parser,
-    Stlc.Subst,
-    Stlc.Types,
+  exposed-modules:
+    Stlc
+    Stlc.Constrain
+    Stlc.Eval
+    Stlc.Infer
+    Stlc.Lexer
+    Stlc.Parser
+    Stlc.Subst
+    Stlc.Types
     Stlc.Unify
   default-language:    Haskell2010
   build-tools:
@@ -35,6 +35,23 @@ executable stlc-infer
     containers,
     lens,
     mtl,
+    unbound-generics
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Wmissing-signatures
+    -Werror
+    -funbox-strict-fields
+
+executable stlc-infer
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-tools:
+    alex,
+    happy
+  build-depends:
+    base >= 4.7 && < 5,
     haskeline,
     unbound-generics
   ghc-options:
