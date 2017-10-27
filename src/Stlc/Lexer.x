@@ -4,6 +4,12 @@
 module Stlc.Lexer where
 }
 
+-- The lexer generator for our language.
+-- Alex will generate a Haskell program from this
+-- specification as a build step (see the cabal file).
+--
+-- We try to emulate Haskell syntax as much as possible.
+
 -- The posn wrapper tracks line and column information for us.
 -- This makes the error message from the lexer friendlier.
 -- TODO(jez) Track the posn information to print better type errors.

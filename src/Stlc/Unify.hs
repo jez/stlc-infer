@@ -1,7 +1,9 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ViewPatterns    #-}
 
-module Stlc.Unify where
+module Stlc.Unify
+  ( unify
+  ) where
 
 import           Stlc.Types
 import           Stlc.Subst
@@ -31,6 +33,9 @@ import           Unbound.Generics.LocallyNameless
 notInFreeVars :: Cvar -> Con -> Bool
 notInFreeVars t t1 = noneOf fv (== t) t1
 
+-- This function uses ViewPatterns, which let us run a function and pattern
+-- match on the result: (viewFn -> pattern)
+-- It's kind of like sticking a unix pipe between the argument and the pattern.
 unify :: Seq.Seq Constraint -> Maybe (Seq.Seq (ExplSubst Con))
 unify (Seq.viewl -> Seq.EmptyL) = Just Seq.empty
 unify (Seq.viewl -> (Constraint t1 t2) :< cs)

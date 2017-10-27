@@ -1,12 +1,17 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Stlc.Eval where
+module Stlc.Eval
+  ( eval
+  ) where
+
+-- Small-step operational semantics for the simply-typed lambda calculus.
+--
+-- TODO(jez) I have a feeling this code can be a lot more concise.
 
 import           Stlc.Types
 
 import           Unbound.Generics.LocallyNameless
 
--- TODO(jez) I have a feeling we can be a lot more concise here.
 trystep :: Term -> FreshM (Maybe Term)
 trystep (Tvar x)         = error $ "Unbound variable: " ++ show x
 trystep (Tlam _)         = return Nothing
@@ -50,11 +55,11 @@ trystep (Tif ei et ee)   = do
         Tbool False -> return $ Just ee
         _ -> error "Expected a bool. This is a bug in the type checker."
 
-eval :: Term -> FreshM Term
-eval e =
+doEval :: Term -> FreshM Term
+doEval e =
   trystep e >>= \case
     Nothing -> return e
-    Just e' -> eval e'
+    Just e' -> doEval e'
 
-runEval :: Term -> Term
-runEval = runFreshM . eval
+eval :: Term -> Term
+eval = runFreshM . doEval

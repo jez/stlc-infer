@@ -18,10 +18,8 @@ import           GHC.Generics                     (Generic)
 import           Text.Show                        (Show)
 import           Unbound.Generics.LocallyNameless
 
--- | We don't have type variables yet, so we're going to let Var mean expression
---   variables
+-- A shorthand for the type of term and type variables
 type Tvar = Name Term
-
 type Cvar = Name Con
 
 -- | Our ABT for simply-typed lambda calculus terms, with numbers and booleans.
@@ -93,7 +91,7 @@ data Constraint =
 bothConstraint :: Applicative f => (Con -> f Con) -> Constraint -> f Constraint
 bothConstraint f (Constraint t1 t2) = Constraint <$> f t1 <*> f t2
 
--- Substitutions reified as a data structure, rather
+-- Substitutions, reified as a data structure rather
 -- than being implicit in the algorithm somewhere.
 -- Maps variables of one sort to ABTs of that sort.
 data ExplSubst a =

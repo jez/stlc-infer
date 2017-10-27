@@ -7,6 +7,12 @@ import           Unbound.Generics.LocallyNameless (bind, s2n)
 
 }
 
+-- The parser generator for our language.
+-- Happy will generate a Haskell program from this
+-- specification as a build step (see the cabal file).
+--
+-- We try to emulate Haskell syntax as much as possible.
+
 %name parseStlc
 %tokentype { Token }
 %error { parseError }

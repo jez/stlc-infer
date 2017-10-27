@@ -1,6 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Stlc.Subst where
+module Stlc.Subst
+  ( substOverConstraint
+  , substOverConstraints
+  ) where
 
 import           Stlc.Types
 

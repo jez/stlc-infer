@@ -19,6 +19,7 @@ executable stlc-infer
   other-modules:
     Stlc.Constrain,
     Stlc.Eval,
+    Stlc.Infer,
     Stlc.Lexer,
     Stlc.Parser,
     Stlc.Subst,
